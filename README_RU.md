@@ -65,7 +65,7 @@ php composer.phar require --prefer-dist brussens/yii2-maintenance-mode "*"
   ],
   
   // Путь до лайаута
-    'viewPath'=>'@web/maintenance/layout',
+    'layoutPath'=>'@web/maintenance/layout',
     
   // Путь до представления
   'viewPath'=>'@web/maintenance/view',
