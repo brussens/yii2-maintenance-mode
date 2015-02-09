@@ -65,7 +65,7 @@ Add to your config file:
   ],
   
   // Layout path
-    'viewPath'=>'@web/maintenance/layout',
+    'layoutPath'=>'@web/maintenance/layout',
     
   // View path
   'viewPath'=>'@web/maintenance/view',
