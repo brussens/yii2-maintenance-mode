@@ -36,7 +36,7 @@ Add to your config file:
   'class' => '\brussens\maintenance\MaintenanceMode',
   
   // Mode status
-  'enable'=>true,
+  'enabled'=>true,
   
   // Route to action
   'route'=>'maintenance/index',
