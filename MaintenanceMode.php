@@ -88,6 +88,14 @@ class MaintenanceMode extends Component
     public $usernameAttribute = 'username';
 
     /**
+     * Default status code to send on maintenance
+     *
+     * 503 = Service Unavailable
+     * @var int
+     */
+    public $statusCode = 503;
+
+    /**
      * Disable items.
      * @var
      */
@@ -100,6 +108,15 @@ class MaintenanceMode extends Component
     {
 
         if ($this->enabled) {
+
+            if($this->statusCode) {
+                if(is_integer($this->statusCode)) {
+                    Yii::$app->getResponse()->setStatusCode($this->statusCode);
+                }
+                else {
+                    throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
+                }
+            }
 
             if($this->users) {
                 if(is_array($this->users)) {
