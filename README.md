@@ -73,5 +73,8 @@ Add to your config file:
   // User name attribute name
   'usernameAttribute'=>'login',
   
+  // HTTP Status Code
+  'statusCode'=>503,
+  
 ],
 ```
