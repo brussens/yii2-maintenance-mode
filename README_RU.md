@@ -75,5 +75,38 @@ php composer.phar require --prefer-dist brussens/yii2-maintenance-mode "*"
   
 ],
 ```
+##Установка режима из консоли
 
+Дублируем компонент в консольной конфигурации:
+```php
+'bootstrap' => ['log', 'maintenanceMode'],
+  ...
+  'components' => [
+  
+    'maintenanceMode'=>[
+    
+      'class' => '\brussens\maintenance\MaintenanceMode',
+      
+    ],
+    ...
+  ],
+```
+Отключаем режим обслуживания в web конфигурации:
+```php
+  
+    'maintenanceMode'=>[
+    
+      'class' => '\brussens\maintenance\MaintenanceMode',
+      'enabled' => false
+      
+    ],
+
+```
+Теперь можно устанавливать режим из консоли:
+```
+php yii maintenance/enable
+```
+```
+php yii maintenance/disable
+```
 ##Профит
