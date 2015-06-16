@@ -11,6 +11,8 @@
  */
 
 namespace brussens\maintenance;
+
+use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
 use yii\base\Component;
 use Yii;
@@ -81,6 +83,13 @@ class MaintenanceMode extends Component
     public $viewPath = '@vendor/brussens/yii2-maintenance-mode/views/maintenance/index';
 
     /**
+     * Path to command file
+     *
+     * @var string
+     */
+    public $commandPath = '@runtime/maintenance';
+
+    /**
      * Username attribute name
      *
      * @var string
@@ -106,63 +115,131 @@ class MaintenanceMode extends Component
      */
     public function init()
     {
+        if('yii\console\Application'===get_class(Yii::$app)) {
+            Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
+        } else {
+            if($this->isEnabled())
+                $this->filtering();
+        }
+    }
 
-        if ($this->enabled) {
+    /**
+     * Set prolonged status enabled.
+     *
+     * It is equal $this->enable=true, but without change config.
+     * @see brussens\maintenance\commands\MaintenanceController.
+     *
+     * @return int
+     * @throws \yii\base\Exception
+     */
+    public function enableProlonged()
+    {
+        $path = $this->getProlongedPath();
+        $dir = dirname($path);
+        if (!is_dir($dir))
+            FileHelper::createDirectory($dir);
 
-            if($this->statusCode) {
-                if(is_integer($this->statusCode)) {
-                    Yii::$app->getResponse()->setStatusCode($this->statusCode);
-                }
-                else {
-                    throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
+        return file_put_contents($path, '');
+    }
+
+    /**
+     * Set prolonged status disabled.
+     *
+     *  It is equal $this->enable=false, but without change config.
+     * @see brussens\maintenance\commands\MaintenanceController.
+     *
+     * @return bool
+     */
+    public function disableProlonged()
+    {
+        $path = $this->getProlongedPath();
+        if(file_exists($path))
+            return unlink($path);
+
+        return true;
+    }
+
+    /**
+     * Check component status.
+     *
+     * @return bool
+     */
+    protected function isEnabled()
+    {
+        return $this->enabled || file_exists($this->getProlongedPath());
+    }
+
+    /**
+     * Get path for command
+     *
+     * @return string
+     */
+    protected function getProlongedPath()
+    {
+        $path = Yii::getAlias($this->commandPath).'/.enable';
+        return FileHelper::normalizePath($path);
+    }
+
+    /**
+     * Filtering process request from web
+     *
+     * @throws InvalidConfigException
+     */
+    protected function filtering()
+    {
+        if($this->statusCode) {
+            if(is_integer($this->statusCode)) {
+                Yii::$app->getResponse()->setStatusCode($this->statusCode);
+            }
+            else {
+                throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
+            }
+        }
+
+        if($this->users) {
+            if(is_array($this->users)) {
+                $this->_disable = in_array(Yii::$app->user->identity->{$this->usernameAttribute}, $this->users);
+            }
+            else {
+                throw new InvalidConfigException('Parameter "users" should be an array.');
+            }
+        }
+
+        if($this->roles) {
+            if(is_array($this->roles)) {
+                foreach ($this->roles as $role) {
+                    $this->_disable = $this->_disable || Yii::$app->user->can($role);
                 }
             }
+            else {
+                throw new InvalidConfigException('Parameter "roles" should be an array.');
+            }
+        }
 
-            if($this->users) {
-                if(is_array($this->users)) {
-                    $this->_disable = in_array(Yii::$app->user->identity->{$this->usernameAttribute}, $this->users);
-                }
-                else {
-                    throw new InvalidConfigException('Parameter "users" should be an array.');
-                }
+        if($this->urls) {
+            if(is_array($this->urls)) {
+                $this->_disable = $this->_disable || in_array(Yii::$app->request->getPathInfo(), $this->urls);
+            }
+            else {
+                throw new InvalidConfigException('Parameter "urls" should be an array.');
+            }
+        }
+
+        if($this->ips) {
+            if(is_array($this->ips)) {
+                $this->_disable = $this->_disable || in_array(Yii::$app->request->userIP, $this->ips);
+            }
+            else {
+                throw new InvalidConfigException('Parameter "ips" should be an array.');
+            }
+        }
+
+        if (!$this->_disable) {
+            if ($this->route === 'maintenance/index') {
+                Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\controllers\MaintenanceController';
             }
 
-            if($this->roles) {
-                if(is_array($this->roles)) {
-                    foreach ($this->roles as $role) {
-                        $this->_disable = $this->_disable || Yii::$app->user->can($role);
-                    }
-                }
-                else {
-                    throw new InvalidConfigException('Parameter "roles" should be an array.');
-                }
-            }
-
-            if($this->urls) {
-                if(is_array($this->urls)) {
-                    $this->_disable = $this->_disable || in_array(Yii::$app->request->getPathInfo(), $this->urls);
-                }
-                else {
-                    throw new InvalidConfigException('Parameter "urls" should be an array.');
-                }
-            }
-
-            if($this->ips) {
-                if(is_array($this->ips)) {
-                    $this->_disable = $this->_disable || in_array(Yii::$app->request->userIP, $this->ips);
-                }
-                else {
-                    throw new InvalidConfigException('Parameter "ips" should be an array.');
-                }
-            }
-
-            if (!$this->_disable) {
-                if ($this->route === 'maintenance/index') {
-                    Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\controllers\MaintenanceController';
-                }
-
-                Yii::$app->catchAll = [$this->route];
-            }
+            Yii::$app->catchAll = [$this->route];
         }
     }
 }

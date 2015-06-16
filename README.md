@@ -78,3 +78,37 @@ Add to your config file:
   
 ],
 ```
+##Set maintenance mode by console command
+
+Add to your console config file:
+```php
+'bootstrap' => ['log', 'maintenanceMode'],
+  ...
+  'components' => [
+  
+    'maintenanceMode'=>[
+    
+      'class' => '\brussens\maintenance\MaintenanceMode',
+      
+    ],
+    ...
+  ],
+```
+Change your web config file:
+```php
+  
+    'maintenanceMode'=>[
+    
+      'class' => '\brussens\maintenance\MaintenanceMode',
+      'enabled' => false
+      
+    ],
+
+```
+Now you can set mod by command:
+```
+php yii maintenance/enable
+```
+```
+php yii maintenance/disable
+```
