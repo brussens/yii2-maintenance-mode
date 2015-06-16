@@ -106,8 +106,11 @@ class MaintenanceMode extends Component
      */
     public function init()
     {
-
-        if ($this->enabled) {
+        if('yii\console\Application'===get_class(Yii::$app)) {
+            Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
+        } else {
+            if(!$this->enabled)
+                return;
 
             if($this->statusCode) {
                 if(is_integer($this->statusCode)) {
