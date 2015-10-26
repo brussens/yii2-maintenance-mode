@@ -120,7 +120,7 @@ class MaintenanceMode extends Component
 
             if($this->users) {
                 if(is_array($this->users)) {
-                    $this->_disable = in_array(Yii::$app->user->identity->{$this->usernameAttribute}, $this->users);
+                    $this->_disable = Yii::$app->user->identity ? in_array(Yii::$app->user->identity->{$this->usernameAttribute}, $this->users): false;
                 }
                 else {
                     throw new InvalidConfigException('Parameter "users" should be an array.');
