@@ -20,6 +20,7 @@ use Yii;
 
 class MaintenanceMode extends Component
 {
+    const STATUS_CODE_OK = 200;
     /**
      *
      * Mode status
@@ -117,8 +118,9 @@ class MaintenanceMode extends Component
         if(Yii::$app instanceof yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
         } else {
-            if($this->getIsEnabled())
+            if($this->getIsEnabled()) {
                 $this->filtering();
+            }
         }
     }
 
@@ -171,7 +173,12 @@ class MaintenanceMode extends Component
     {
         if($this->statusCode) {
             if(is_integer($this->statusCode)) {
-                Yii::$app->getResponse()->setStatusCode($this->statusCode);
+                if(Yii::$app->getRequest()->isAjax()) {
+                    Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
+                }
+                else {
+                    Yii::$app->getResponse()->setStatusCode($this->statusCode);
+                }
             }
             else {
                 throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
@@ -237,6 +244,10 @@ class MaintenanceMode extends Component
             }
 
             Yii::$app->catchAll = [$this->route];
+
+        }
+        else {
+            Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
         }
     }
 }
