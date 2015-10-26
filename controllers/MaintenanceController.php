@@ -3,7 +3,7 @@
  * Default controller of maintenance mode component for Yii framework 2.x.x version.
  *
  * @package brussens\maintenance\controllers
- * @version 0.2.0
+ * @version 0.2.1
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @link https://github.com/brussens/yii2-maintenance-mode
  */

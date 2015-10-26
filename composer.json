@@ -3,12 +3,16 @@
     "description": "Maintenance mode component for Yii framework 2.x.x version.",
     "license": "BSD-3-Clause",
     "type": "yii2-extension",
+    "version":"0.2.1",
     "keywords": ["yii2", "yii 2", "maintenance", "mode"],
     "authors": [
         {
             "name": "Brusenskiy Dmitry",
             "email": "brussens@nativeweb.ru",
             "url": "http://nativeweb.ru"
+        },
+        {
+            "name": "Poltoratsky Alexander"
         }
     ],
     "minimum-stability": "dev",
