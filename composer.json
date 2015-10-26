@@ -3,7 +3,7 @@
     "description": "Maintenance mode component for Yii framework 2.x.x version.",
     "license": "BSD-3-Clause",
     "type": "yii2-extension",
-    "version":"0.2.1",
+    "version":"0.2.2",
     "keywords": ["yii2", "yii 2", "maintenance", "mode"],
     "authors": [
         {
