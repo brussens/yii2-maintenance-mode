@@ -115,5 +115,15 @@ php yii maintenance/enable
 ```
 php yii maintenance/disable
 ```
+##Allow display debug panel
 
-##Profit
+Add the following rules in the 'urls' section of component settings:
+
+```php
+
+    'urls' => [
+      'debug/default/toolbar',
+      'debug/default/view'
+    ]
+
+```
