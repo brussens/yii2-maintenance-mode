@@ -30,7 +30,7 @@ class MaintenanceController extends Controller {
      */
     public function actionIndex()
     {
-        if (Yii::$app->request->isAjax) {
+        if (Yii::$app->getRequest()->getIsAjax()) {
             return false;
         }
         return $this->render(Yii::$app->maintenanceMode->viewPath);

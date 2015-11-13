@@ -173,7 +173,7 @@ class MaintenanceMode extends Component
     {
         if($this->statusCode) {
             if(is_integer($this->statusCode)) {
-                if(Yii::$app->getRequest()->isAjax()) {
+                if(Yii::$app->getRequest()->getIsAjax()) {
                     Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
                 }
                 else {
