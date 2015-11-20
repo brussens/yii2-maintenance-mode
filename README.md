@@ -37,6 +37,9 @@ Add to your config file:
   // Component class namespace
   'class' => '\brussens\maintenance\MaintenanceMode',
   
+  // Page title
+  'title' => 'Custom title',
+  
   // Mode status
   'enabled'=>true,
   
