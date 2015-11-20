@@ -37,6 +37,13 @@ class MaintenanceMode extends Component
     public $route = 'maintenance/index';
 
     /**
+     * Show title
+     *
+     * @var null
+     */
+    public $title;
+    
+    /**
      * Show message
      *
      * @var null

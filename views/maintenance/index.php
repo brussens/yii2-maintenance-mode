@@ -8,7 +8,17 @@
  */
 use yii\helpers\Html;
 ?>
-<h1>We&rsquo;ll be back soon!</h1>
+<h1>
+    <?php if (Yii::$app->maintenanceMode->title): ?>
+    
+        <?php echo Yii::$app->maintenanceMode->title; ?>
+    
+    <?php else: ?>
+        
+        We&rsquo;ll be back soon!
+    
+    <?php endif; ?>
+</h1>
 <div>
     <p>
         <?php if (Yii::$app->maintenanceMode->message): ?>
