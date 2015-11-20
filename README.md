@@ -43,6 +43,9 @@ Add to your config file:
   // Route to action
   'route'=>'maintenance/index',
   
+  // Show title
+  'title'=>'this site is under maintenance',
+  
   // Show message
   'message'=>'Sorry, perform technical works.',
   
