@@ -1,14 +1,14 @@
 <?php
 /**
  * Default layout of maintenance mode component for Yii framework 2.x.x version.
- *
- * @version 0.2.0
+ * @version 0.2.1
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @link https://github.com/brussens/yii2-maintenance-mode
+ * @var $this \yii\web\View
+ * @var $content string
  */
 use yii\helpers\Html;
 use brussens\maintenance\Asset;
-
 Asset::register($this);
 ?>
 <?php $this->beginPage() ?>

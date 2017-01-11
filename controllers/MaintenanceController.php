@@ -1,19 +1,16 @@
 <?php
 /**
  * Default controller of maintenance mode component for Yii framework 2.x.x version.
- *
  * @package brussens\maintenance\controllers
- * @version 0.2.1
+ * @version 0.2.2
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @link https://github.com/brussens/yii2-maintenance-mode
  */
-
 namespace brussens\maintenance\controllers;
 use Yii;
 use yii\web\Controller;
-
-class MaintenanceController extends Controller {
-
+class MaintenanceController extends Controller
+{
     /**
      * Initialize controller.
      */
@@ -22,7 +19,6 @@ class MaintenanceController extends Controller {
         $this->layout = Yii::$app->maintenanceMode->layoutPath;
         parent::init();
     }
-
     /**
      * Index action.
      *
@@ -30,9 +26,13 @@ class MaintenanceController extends Controller {
      */
     public function actionIndex()
     {
-        if (Yii::$app->getRequest()->getIsAjax()) {
+        $app = Yii::$app;
+        if ($app->getRequest()->getIsAjax()) {
             return false;
         }
-        return $this->render(Yii::$app->maintenanceMode->viewPath);
+        return $this->render($app->maintenanceMode->viewPath, [
+            'title' => $app->maintenanceMode->title,
+            'message' => $app->maintenanceMode->message
+        ]);
     }
 } 

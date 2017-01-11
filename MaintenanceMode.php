@@ -1,122 +1,92 @@
 <?php
 /**
  * Maintenance mode component for Yii framework 2.x.x version.
- *
  * Class MaintenanceMode
- *
  * @package brussens\maintenance
- * @version 0.2.0
+ * @version 0.2.1
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @author co11ter (Poltoratsky Alexander)
  * @link https://github.com/brussens/yii2-maintenance-mode
  */
-
 namespace brussens\maintenance;
-
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Component;
 use yii\helpers\FileHelper;
-use Yii;
-
 class MaintenanceMode extends Component
 {
     const STATUS_CODE_OK = 200;
     /**
-     *
      * Mode status
-     *
      * @var bool
      */
     public $enabled = true;
-
     /**
      * Route to action
-     *
      * @var string
      */
     public $route = 'maintenance/index';
-
     /**
      * Show title
-     *
      * @var null
      */
-    public $title;
-    
+    public $title = 'We&rsquo;ll be back soon!';
     /**
      * Show message
-     *
      * @var null
      */
-    public $message;
-
+    public $message = 'Sorry, perform technical works.';
     /**
      * Allowed user name(s)
      * @var
      */
     public $users;
-
     /**
      * Allowed roles
      * @var array
      */
     public $roles;
-
     /**
      * Allowed IP addresses
-     *
      * @var array
      */
     public $ips;
-
     /**
      * Allowed urls
-     *
      * @var array
      */
     public $urls;
-
     /**
      * Path to layout file
-     *
      * @var string
      */
     public $layoutPath = '@vendor/brussens/yii2-maintenance-mode/views/layouts/main';
-
     /**
      * Path to view file
-     *
      * @var string
      */
     public $viewPath = '@vendor/brussens/yii2-maintenance-mode/views/maintenance/index';
-
     /**
      * Path to command file
      * @var string
      */
     public $commandPath = '@runtime/maintenance';
-
     /**
      * Username attribute name
-     *
      * @var string
      */
     public $usernameAttribute = 'username';
-
     /**
      * Default status code to send on maintenance
-     *
      * 503 = Service Unavailable
      * @var int
      */
     public $statusCode = 503;
-
     /**
      * Disable items.
      * @var
      */
     protected $disable;
-
     /**
      * init method
      */
@@ -130,7 +100,6 @@ class MaintenanceMode extends Component
             }
         }
     }
-
     /**
      * @return bool
      */
@@ -138,7 +107,6 @@ class MaintenanceMode extends Component
     {
         return $this->enabled || file_exists($this->getProlongedPath());
     }
-
     /**
      * @return mixed
      */
@@ -147,7 +115,6 @@ class MaintenanceMode extends Component
         $path = Yii::getAlias($this->commandPath).'/.enable';
         return FileHelper::normalizePath($path);
     }
-
     /**
      * @return bool
      */
@@ -159,7 +126,6 @@ class MaintenanceMode extends Component
         }
         return true;
     }
-
     /**
      * @return int
      */
@@ -172,7 +138,6 @@ class MaintenanceMode extends Component
         }
         return file_put_contents($path, '');
     }
-
     /**
      * @throws InvalidConfigException
      */
@@ -191,7 +156,6 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
             }
         }
-
         /**
          * Check users
          */
@@ -206,7 +170,6 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "users" should be an array or string.');
             }
         }
-
         /**
          * Check roles
          */
@@ -220,7 +183,6 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "roles" should be an array.');
             }
         }
-
         /**
          * Check URL's
          */
@@ -232,7 +194,6 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "urls" should be an array.');
             }
         }
-
         /**
          * Checked IP's
          */
@@ -244,14 +205,12 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "ips" should be an array.');
             }
         }
-
         if (!$this->disable) {
             if ($this->route === 'maintenance/index') {
                 Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\controllers\MaintenanceController';
             }
 
             Yii::$app->catchAll = [$this->route];
-
         }
         else {
             Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);

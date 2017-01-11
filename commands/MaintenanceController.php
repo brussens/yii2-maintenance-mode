@@ -1,17 +1,14 @@
 <?php
 /**
  * Command for manage maintenance mode component for Yii framework 2.x.x version.
- *
  * @package brussens\maintenance\commands
- * @version 0.1.0
+ * @version 0.1.1
  * @author co11ter (Poltoratsky Alexander)
  * @link https://github.com/brussens/yii2-maintenance-mode
  */
 namespace brussens\maintenance\commands;
-
 use Yii;
 use yii\console\Controller;
-
 class MaintenanceController extends Controller
 {
     public function actionIndex()
@@ -20,7 +17,6 @@ class MaintenanceController extends Controller
     }
     /**
      * Enable maintenance mode
-     *
      * @return int
      */
     public function actionEnable()
@@ -28,12 +24,10 @@ class MaintenanceController extends Controller
         if(!Yii::$app->maintenanceMode->enableProlonged()) {
             return Controller::EXIT_CODE_ERROR;
         }
-
         return Controller::EXIT_CODE_NORMAL;
     }
     /**
      * Disable maintenance mode
-     *
      * @return int
      */
     public function actionDisable()
@@ -41,7 +35,6 @@ class MaintenanceController extends Controller
         if(!Yii::$app->maintenanceMode->disableProlonged()) {
             return Controller::EXIT_CODE_ERROR;
         }
-
         return Controller::EXIT_CODE_NORMAL;
     }
 }
