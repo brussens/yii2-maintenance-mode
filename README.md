@@ -19,71 +19,69 @@ to the require section of your `composer.json` file.
 Add to your config file:
 ```php
 'bootstrap' => ['log', 'maintenanceMode'],
-  ...
-  'components' => [
-  
-    'maintenanceMode'=>[
-    
-      'class' => '\brussens\maintenance\MaintenanceMode',
-      
+...
+'components' => [
+    'maintenanceMode' => [
+        'class' => 'brussens\maintenance\MaintenanceMode',
     ],
     ...
-  ],
+],
 ```
 ##Options
 ```php
-'maintenanceMode'=>[
+'maintenanceMode' => [
+    // Component class namespace
+    'class' => 'brussens\maintenance\MaintenanceMode',
 
-  // Component class namespace
-  'class' => '\brussens\maintenance\MaintenanceMode',
-  
-  // Page title
-  'title' => 'Custom title',
-  
-  // Mode status
-  'enabled'=>true,
-  
-  // Route to action
-  'route'=>'maintenance/index',
-  
-  // Show title
-  'title'=>'this site is under maintenance',
-  
-  // Show message
-  'message'=>'Sorry, perform technical works.',
-  
-  // Allowed user names
-  'users'=>[
-    'BrusSENS',
-  ],
-  
-  // Allowed roles
-  'roles'=>[
-    'administrator',
-  ],
-  
-  // Allowed IP addresses
-  'ips'=>[
-    '127.0.0.1',
-  ],
-  
-  // Allowed URLs
-  'urls'=>[
-    'site/login'
-  ],
-  
-  // Layout path
-    'layoutPath'=>'@web/maintenance/layout',
-    
-  // View path
-  'viewPath'=>'@web/maintenance/view',
-  
-  // User name attribute name
-  'usernameAttribute'=>'login',
-  
-  // HTTP Status Code
-  'statusCode'=>503,
-  
+    // Page title
+    'title' => 'Custom title',
+
+    // Mode status
+    'enabled' => true,
+
+    // Route to action
+    'route' => 'maintenance/index',
+
+    // Show title
+    'title' => 'this site is under maintenance',
+
+    // Show message
+    'message' => 'Sorry, perform technical works.',
+
+    // Allowed user names
+    'users' => [
+        'BrusSENS',
+    ],
+
+    // Allowed roles
+    'roles' => [
+        'administrator',
+    ],
+
+    // Allowed IP addresses
+    'ips' => [
+        '127.0.0.1',
+    ],
+
+    // Allowed URLs
+    'urls' => [
+        'site/login'
+    ],
+
+    // Layout path
+    'layoutPath' => '@web/maintenance/layout',
+
+    // View path
+    'viewPath' => '@web/maintenance/view',
+
+    // User name attribute name
+    'usernameAttribute' => 'login',
+
+    // HTTP Status Code
+    'statusCode' => 503,
+
+    //Retry-After header
+    'retryAfter' => 120 //or Wed, 21 Oct 2015 07:28:00 GMT for example
 ],
 ```
 
@@ -92,27 +90,20 @@ Add to your config file:
 Add to your console config file:
 ```php
 'bootstrap' => ['log', 'maintenanceMode'],
-  ...
-  'components' => [
-  
-    'maintenanceMode'=>[
-    
-      'class' => '\brussens\maintenance\MaintenanceMode',
-      
+...
+'components' => [
+    'maintenanceMode' => [
+        'class' => 'brussens\maintenance\MaintenanceMode',
     ],
-    ...
-  ],
+...
+],
 ```
 Change your web config file:
 ```php
-  
-    'maintenanceMode'=>[
-    
-      'class' => '\brussens\maintenance\MaintenanceMode',
-      'enabled' => false
-      
-    ],
-
+'maintenanceMode' => [
+    'class' => 'brussens\maintenance\MaintenanceMode',
+    'enabled' => false
+],
 ```
 Now you can set mod by command:
 ```
@@ -126,10 +117,8 @@ php yii maintenance/disable
 Add the following rules in the 'urls' section of component settings:
 
 ```php
-
-    'urls' => [
-      'debug/default/toolbar',
-      'debug/default/view'
-    ]
-
+'urls' => [
+    'debug/default/toolbar',
+    'debug/default/view'
+]
 ```

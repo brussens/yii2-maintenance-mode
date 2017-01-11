@@ -6,6 +6,7 @@
  * @version 0.2.1
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @author co11ter (Poltoratsky Alexander)
+ * @author ibra1994
  * @link https://github.com/brussens/yii2-maintenance-mode
  */
 namespace brussens\maintenance;
@@ -88,12 +89,13 @@ class MaintenanceMode extends Component
      */
     protected $disable;
     /**
+     * Retry-After header
+     * @var bool|string
+     */
+    public $retryAfter = false;
+    /**
      * init method
      */
-    
-    public $retryAfter=false;
-    
-    
     public function init()
     {
         if(Yii::$app instanceof yii\console\Application) {
