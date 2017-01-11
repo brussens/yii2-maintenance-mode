@@ -90,6 +90,10 @@ class MaintenanceMode extends Component
     /**
      * init method
      */
+    
+    public $retryAfter=false;
+    
+    
     public function init()
     {
         if(Yii::$app instanceof yii\console\Application) {
@@ -150,6 +154,9 @@ class MaintenanceMode extends Component
                 }
                 else {
                     Yii::$app->getResponse()->setStatusCode($this->statusCode);
+                    if($this->retryAfter){
+                        Yii::$app->response->headers->set('Retry-After', $this->retryAfter);
+                    }
                 }
             }
             else {
