@@ -122,3 +122,25 @@ Add the following rules in the 'urls' section of component settings:
     'debug/default/view'
 ]
 ```
+
+##Switch mode in dashboard
+
+```php
+class DashboardController extends Controller
+{
+    ...
+    public function actionEnable()
+    {
+        ...
+        Yii::$app->maintenance->enable();
+        ...
+    }
+    public function actionDisable()
+    {
+        ...
+        Yii::$app->maintenance->disable();
+        ...
+    }
+    ...
+}
+```
