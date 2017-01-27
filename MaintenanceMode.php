@@ -3,7 +3,7 @@
  * Maintenance mode component for Yii framework 2.x.x version.
  * Class MaintenanceMode
  * @package brussens\maintenance
- * @version 0.2.1
+ * @version 0.2.2
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @author co11ter (Poltoratsky Alexander)
  * @author ibra1994
@@ -71,7 +71,7 @@ class MaintenanceMode extends Component
      * Path to command file
      * @var string
      */
-    public $commandPath = '@runtime/maintenance';
+    public $commandPath = '@vendor/../maintenance';
     /**
      * Username attribute name
      * @var string
@@ -98,7 +98,11 @@ class MaintenanceMode extends Component
      */
     public function init()
     {
-        if(Yii::$app instanceof yii\console\Application) {
+        Yii::setAlias('@maintenance', $this->commandPath);
+        if(!file_exists(Yii::getAlias('@maintenance'))) {
+            FileHelper::createDirectory(Yii::getAlias('@maintenance'));
+        }
+        if(Yii::$app instanceof \yii\console\Application) {
             Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
         } else {
             if($this->getIsEnabled()) {
@@ -107,42 +111,39 @@ class MaintenanceMode extends Component
         }
     }
     /**
+     * @param bool $onlyConsole
      * @return bool
      */
-    protected function getIsEnabled()
+    public function getIsEnabled($onlyConsole = false)
     {
-        return $this->enabled || file_exists($this->getProlongedPath());
+        $exists = file_exists($this->getStatusFilePath());
+        return $onlyConsole ? $exists : $this->enabled || $exists;
     }
     /**
-     * @return mixed
+     * @return bool|string
      */
-    protected function getProlongedPath()
+    protected function getStatusFilePath()
     {
-        $path = Yii::getAlias($this->commandPath).'/.enable';
-        return FileHelper::normalizePath($path);
+        return Yii::getAlias('@maintenance/.enable');
     }
     /**
      * @return bool
      */
-    public function disableProlonged()
+    public function disable()
     {
-        $path = $this->getProlongedPath();
-        if(file_exists($path)) {
-            return unlink($path);
+        $path = $this->getStatusFilePath();
+        if($path && file_exists($path)) {
+            return (bool) unlink($path);
         }
-        return true;
+        return false;
     }
     /**
-     * @return int
+     * @return bool
      */
-    public function enableProlonged()
+    public function enable()
     {
-        $path = $this->getProlongedPath();
-        $dir = dirname($path);
-        if (!is_dir($dir)) {
-            FileHelper::createDirectory($dir);
-        }
-        return file_put_contents($path, '');
+        $path = $this->getStatusFilePath();
+        return (bool) file_put_contents($path, ' ');
     }
     /**
      * @throws InvalidConfigException

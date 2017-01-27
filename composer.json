@@ -3,7 +3,7 @@
     "description": "Maintenance mode component for Yii framework 2.x.x version.",
     "license": "MIT",
     "type": "yii2-extension",
-    "version":"0.2.4",
+    "version":"0.2.5",
     "keywords": ["yii2", "yii 2", "maintenance", "mode"],
     "authors": [
         {
@@ -20,6 +20,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "php": ">=5.4.0",
         "yiisoft/yii2": "*"
     },
     "autoload": {
