@@ -1,8 +1,8 @@
-#Yii2 Maintenance mode component
+# Yii2 Maintenance mode component
 [![Latest Stable Version](https://poser.pugx.org/brussens/yii2-maintenance-mode/v/stable)](https://packagist.org/packages/brussens/yii2-maintenance-mode)
 [![Total Downloads](https://poser.pugx.org/brussens/yii2-maintenance-mode/downloads)](https://packagist.org/packages/brussens/yii2-maintenance-mode)
 [![License](https://poser.pugx.org/brussens/yii2-maintenance-mode/license)](https://packagist.org/packages/brussens/yii2-maintenance-mode)
-##Install
+## Install
 Either run
 ```
 php composer.phar require --prefer-dist brussens/yii2-maintenance-mode "*"
@@ -27,7 +27,7 @@ Add to your config file:
     ...
 ],
 ```
-##Options
+## Options
 ```php
 'maintenanceMode' => [
     // Component class namespace
@@ -85,7 +85,7 @@ Add to your config file:
 ],
 ```
 
-##Set maintenance mode by console command
+## Set maintenance mode by console command
 
 Add to your console config file:
 ```php
@@ -112,7 +112,7 @@ php yii maintenance/enable
 ```
 php yii maintenance/disable
 ```
-##Allow display debug panel
+## Allow display debug panel
 
 Add the following rules in the 'urls' section of component settings:
 
@@ -123,7 +123,7 @@ Add the following rules in the 'urls' section of component settings:
 ]
 ```
 
-##Switch mode in dashboard
+## Switch mode in dashboard
 
 ```php
 class DashboardController extends Controller
