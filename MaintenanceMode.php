@@ -110,8 +110,8 @@ class MaintenanceMode extends Component
     }
     /**
      * Checks if mode is on.
-     * @param bool $onlyConsole
-     * @return bool
+     * @param boolean $onlyConsole
+     * @return boolean
      */
     public function getIsEnabled($onlyConsole = false)
     {
@@ -120,7 +120,7 @@ class MaintenanceMode extends Component
     }
     /**
      * Return status file path.
-     * @return bool|string
+     * @return boolean|string
      */
     protected function getStatusFilePath()
     {
@@ -128,7 +128,7 @@ class MaintenanceMode extends Component
     }
     /**
      * Turn off mode.
-     * @return bool
+     * @return boolean
      */
     public function disable()
     {
@@ -140,7 +140,7 @@ class MaintenanceMode extends Component
     }
     /**
      * Turn on mode.
-     * @return bool
+     * @return boolean
      */
     public function enable()
     {
@@ -150,7 +150,7 @@ class MaintenanceMode extends Component
     /**
      * Check IP (mask supported).
      * @param $filter
-     * @return bool
+     * @return boolean
      */
     protected function checkIp($filter)
     {
