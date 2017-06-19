@@ -29,7 +29,7 @@ class MaintenanceMode extends Component
      * Show title
      * @var string
      */
-    public $title = 'We&rsquo;ll be back soon!';
+    public $title = 'We’ll be back soon!';
     /**
      * Show message
      * @var string
