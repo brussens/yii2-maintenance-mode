@@ -3,10 +3,8 @@
  * Maintenance mode component for Yii framework 2.x.x version.
  * Class MaintenanceMode
  * @package brussens\maintenance
- * @version 0.2.2
+ * @version 0.2.3
  * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
- * @author co11ter (Poltoratsky Alexander)
- * @author ibra1994
  * @link https://github.com/brussens/yii2-maintenance-mode
  */
 namespace brussens\maintenance;
@@ -19,9 +17,9 @@ class MaintenanceMode extends Component
     const STATUS_CODE_OK = 200;
     /**
      * Mode status
-     * @var bool
+     * @var boolean
      */
-    public $enabled = true;
+    public $enabled = false;
     /**
      * Route to action
      * @var string
@@ -29,17 +27,17 @@ class MaintenanceMode extends Component
     public $route = 'maintenance/index';
     /**
      * Show title
-     * @var null
+     * @var string
      */
-    public $title = 'We’ll be back soon!';
+    public $title = 'We&rsquo;ll be back soon!';
     /**
      * Show message
-     * @var null
+     * @var string
      */
     public $message = 'Sorry, perform technical works.';
     /**
      * Allowed user name(s)
-     * @var
+     * @var array|string
      */
     public $users;
     /**
@@ -80,21 +78,21 @@ class MaintenanceMode extends Component
     /**
      * Default status code to send on maintenance
      * 503 = Service Unavailable
-     * @var int
+     * @var integer
      */
     public $statusCode = 503;
     /**
      * Disable items.
-     * @var
+     * @var boolean
      */
     protected $disable;
     /**
      * Retry-After header
-     * @var bool|string
+     * @var boolean|string
      */
     public $retryAfter = false;
     /**
-     * init method
+     * Init method
      */
     public function init()
     {
@@ -111,6 +109,7 @@ class MaintenanceMode extends Component
         }
     }
     /**
+     * Checks if mode is on.
      * @param bool $onlyConsole
      * @return bool
      */
@@ -120,6 +119,7 @@ class MaintenanceMode extends Component
         return $onlyConsole ? $exists : $this->enabled || $exists;
     }
     /**
+     * Return status file path.
      * @return bool|string
      */
     protected function getStatusFilePath()
@@ -127,6 +127,7 @@ class MaintenanceMode extends Component
         return Yii::getAlias('@maintenance/.enable');
     }
     /**
+     * Turn off mode.
      * @return bool
      */
     public function disable()
@@ -138,6 +139,7 @@ class MaintenanceMode extends Component
         return false;
     }
     /**
+     * Turn on mode.
      * @return bool
      */
     public function enable()
@@ -146,19 +148,31 @@ class MaintenanceMode extends Component
         return (bool) file_put_contents($path, ' ');
     }
     /**
+     * Check IP (mask supported).
+     * @param $filter
+     * @return bool
+     */
+    protected function checkIp($filter)
+    {
+        $ip = Yii::$app->getRequest()->getUserIP();
+        return $filter === '*' || $filter === $ip || (($pos = strpos($filter, '*')) !== false && !strncmp($ip, $filter, $pos));
+    }
+    /**
+     * Filtering by configuration.
      * @throws InvalidConfigException
      */
     protected function filtering()
     {
+        $app = Yii::$app;
         if($this->statusCode) {
             if(is_integer($this->statusCode)) {
-                if(Yii::$app->getRequest()->getIsAjax()) {
-                    Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
+                if($app->getRequest()->getIsAjax()) {
+                    $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
                 }
                 else {
-                    Yii::$app->getResponse()->setStatusCode($this->statusCode);
+                    $app->getResponse()->setStatusCode($this->statusCode);
                     if($this->retryAfter){
-                        Yii::$app->response->headers->set('Retry-After', $this->retryAfter);
+                        $app->getResponse()->getHeaders()->set('Retry-After', $this->retryAfter);
                     }
                 }
             }
@@ -166,64 +180,58 @@ class MaintenanceMode extends Component
                 throw new InvalidConfigException('Parameter "statusCode" should be an integer.');
             }
         }
-        /**
-         * Check users
-         */
+        // Check users
         if($this->users) {
             if(is_array($this->users)) {
-                $this->disable = Yii::$app->user->identity ? in_array(Yii::$app->user->identity->{$this->usernameAttribute}, $this->users): false;
+                $this->disable = $app->getUser()->getIdentity() ? in_array($app->getUser()->getIdentity()->{$this->usernameAttribute}, $this->users) : false;
             }
             elseif(is_string($this->users)) {
-                $this->disable = Yii::$app->user->identity->{$this->usernameAttribute} === $this->users;
+                $this->disable = $app->getUser()->getIdentity()->{$this->usernameAttribute} === $this->users;
             }
             else {
                 throw new InvalidConfigException('Parameter "users" should be an array or string.');
             }
         }
-        /**
-         * Check roles
-         */
+        // Check roles
         if($this->roles) {
             if(is_array($this->roles)) {
                 foreach ($this->roles as $role) {
-                    $this->disable = $this->disable || Yii::$app->user->can($role);
+                    $this->disable = $this->disable || $app->getUser()->can($role);
                 }
             }
             else {
                 throw new InvalidConfigException('Parameter "roles" should be an array.');
             }
         }
-        /**
-         * Check URL's
-         */
+        // Check URL's
         if($this->urls) {
             if(is_array($this->urls)) {
-                $this->disable = $this->disable || in_array(Yii::$app->request->getPathInfo(), $this->urls);
+                $this->disable = $this->disable || in_array($app->getRequest()->getPathInfo(), $this->urls);
             }
             else {
                 throw new InvalidConfigException('Parameter "urls" should be an array.');
             }
         }
-        /**
-         * Checked IP's
-         */
+        // Check IP's
         if($this->ips) {
             if(is_array($this->ips)) {
-                $this->disable = $this->disable || in_array(Yii::$app->request->userIP, $this->ips);
-            }
-            else {
+                foreach ($this->ips as $filter) {
+                    $this->disable = $this->disable || $this->checkIp($filter);
+                }
+            } elseif(is_string($this->ips)){
+                $this->disable = $this->disable || $this->checkIp($this->ips);
+            } else {
                 throw new InvalidConfigException('Parameter "ips" should be an array.');
             }
         }
         if (!$this->disable) {
             if ($this->route === 'maintenance/index') {
-                Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\controllers\MaintenanceController';
+                $app->controllerMap['maintenance'] = 'brussens\maintenance\controllers\MaintenanceController';
             }
-
-            Yii::$app->catchAll = [$this->route];
+            $app->catchAll = [$this->route];
         }
         else {
-            Yii::$app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
+            $app->getResponse()->setStatusCode(self::STATUS_CODE_OK);
         }
     }
 }
