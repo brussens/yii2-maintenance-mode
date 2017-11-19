@@ -1,35 +1,45 @@
 <?php
 /**
- * Default layout of maintenance mode component for Yii framework 2.x.x version.
- * @version 0.2.1
- * @author BrusSENS (Brusenskiy Dmitry) <brussens@nativeweb.ru>
  * @link https://github.com/brussens/yii2-maintenance-mode
- * @var $this \yii\web\View
- * @var $content string
+ * @copyright Copyright (c) 2017 Brusensky Dmitry
+ * @license http://opensource.org/licenses/MIT MIT
  */
+
+use Yii;
 use yii\helpers\Html;
 use brussens\maintenance\Asset;
+
+/**
+ * Default layout of maintenance mode component for Yii framework 2.x.x version.
+ *
+ * @since 0.2.0
+ * @author Brusensky Dmity <brussens@nativeweb.ru>
+ */
+
+/** @var $this \yii\web\View */
+/** @var $content string */
+
 Asset::register($this);
 ?>
-<?php $this->beginPage() ?>
+<?php $this->beginPage(); ?>
     <!DOCTYPE html>
-    <html lang="<?php echo \Yii::$app->language; ?>">
+    <html lang="<?= Yii::$app->language; ?>">
     <head>
-        <meta charset="<?php echo \Yii::$app->charset; ?>">
-        <title><?php echo Html::encode(Yii::$app->name); ?></title>
+        <meta charset="<?= \Yii::$app->charset; ?>">
+        <title><?= Html::encode(Yii::$app->name); ?></title>
         <?php $this->head(); ?>
     </head>
     <body>
-    <?php $this->beginBody() ?>
+    <?php $this->beginBody(); ?>
     <section>
-        <?php echo $content; ?>
+        <?= $content; ?>
     </section>
     <footer>
         <div class="container">
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
-    <?php $this->endBody() ?>
+    <?php $this->endBody(); ?>
     </body>
     </html>
-<?php $this->endPage() ?>
+<?php $this->endPage(); ?>
