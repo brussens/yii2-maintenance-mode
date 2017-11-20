@@ -112,6 +112,12 @@ class MaintenanceMode extends Component
      * @var bool|string
      */
     public $retryAfter = false;
+    /**
+     * Console controller class name.
+     * @since 0.3.0
+     * @var string
+     */
+    public $consoleController = 'brussens\maintenance\commands\MaintenanceController';
 
     /**
      * Disable items.
@@ -131,7 +137,7 @@ class MaintenanceMode extends Component
             FileHelper::createDirectory(Yii::getAlias('@maintenance'));
         }
         if (Yii::$app instanceof \yii\console\Application) {
-            Yii::$app->controllerMap['maintenance'] = 'brussens\maintenance\commands\MaintenanceController';
+            Yii::$app->controllerMap['maintenance'] = $this->consoleController;
         } else {
             if ($this->getIsEnabled()) {
                 $this->filtering();
