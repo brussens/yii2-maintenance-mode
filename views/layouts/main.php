@@ -5,7 +5,6 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-use Yii;
 use yii\helpers\Html;
 use brussens\maintenance\Asset;
 
