@@ -67,7 +67,7 @@ You can use filters for allow excepts:
             'filters' = [
                 //Allowed URIs filter. Your can allow debug panel URI.
                 [
-                    'class' => 'brussens\maintenance\checkers\URIFilter',
+                    'class' => 'brussens\maintenance\filters\URIFilter',
                     'uri' => [
                         'debug/default/toolbar',
                         'debug/default/view',
