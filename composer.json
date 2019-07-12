@@ -7,8 +7,7 @@
     "authors": [
         {
             "name": "Brusenskiy Dmitry",
-            "email": "brussens@nativeweb.ru",
-            "url": "http://nativeweb.ru"
+            "email": "brussens@nativeweb.ru"
         }
     ],
     "minimum-stability": "dev",
@@ -18,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "brussens\\maintenance\\": ""
+            "brussens\\maintenance\\": "/src"
         }
     }
 }
