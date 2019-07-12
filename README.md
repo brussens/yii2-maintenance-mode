@@ -31,7 +31,7 @@ Add to your config file:
             // Filters. Read Filters for more info.
             'filters' = [
                 [
-                    'class' => 'brussens\maintenance\checkers\URIFilter',
+                    'class' => 'brussens\maintenance\filters\URIFilter',
                     'uri' => [
                         'debug/default/toolbar',
                         'debug/default/view',
@@ -76,21 +76,21 @@ You can use filters for allow excepts:
                 ],
                 // Allowed roles filter
                 [
-                    'class' => 'brussens\maintenance\checkers\RoleFilter',
+                    'class' => 'brussens\maintenance\filters\RoleFilter',
                     'roles' => [
                         'administrator'
                     ]
                 ],
                 // Allowed IP addresses filter
                 [
-                    'class' => 'brussens\maintenance\checkers\IpFilter',
+                    'class' => 'brussens\maintenance\filters\IpFilter',
                     'ips' => [
                         '127.0.0.1'
                     ]
                 ],
                 //Allowed user names
                 [
-                    'class' => 'brussens\maintenance\checkers\UserFilter',
+                    'class' => 'brussens\maintenance\filters\UserFilter',
                     'checkedAttribute' => 'username',
                     'users' => [
                         'BrusSENS',
