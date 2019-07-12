@@ -18,129 +18,149 @@ to the require section of your `composer.json` file.
 
 Add to your config file:
 ```php
-'bootstrap' => ['log', 'maintenanceMode'],
+'bootstrap' => [
+    'brussens\maintenance\Maintenance'
+],
 ...
-'components' => [
-    'maintenanceMode' => [
-        'class' => 'brussens\maintenance\MaintenanceMode',
-    ],
-    ...
-],
+'container' => [
+    'singletons' => [
+        'brussens\maintenance\Maintenance' => [
+            'class' => 'brussens\maintenance\Maintenance',
+            // Route to action
+            'route' => 'maintenance/index',
+            // Filters. Read Filters for more info.
+            'filters' = [
+                [
+                    'class' => 'brussens\maintenance\checkers\URIFilter',
+                    'uri' => [
+                        'debug/default/toolbar',
+                        'debug/default/view',
+                        'site/login'
+                    ]
+                ]
+            ],
+            // HTTP Status Code
+            'statusCode' => 503,
+            //Retry-After header
+            'retryAfter' => 120 //or Wed, 21 Oct 2015 07:28:00 GMT for example
+        ],
+        'brussens\maintenance\StateInterface' => [
+            'class' => 'brussens\maintenance\states\FileState',
+            'fileName' => 'myfile.ext'
+            'directory' => '@mypath'
+        ]
+    ]
+]
 ```
-## Options
+
+## Filters
+You can use filters for allow excepts:
+
 ```php
-'maintenanceMode' => [
-    // Component class namespace
-    'class' => 'brussens\maintenance\MaintenanceMode',
-
-    // Page title
-    'title' => 'Custom title',
-
-    // Mode status
-    'enabled' => true,
-
-    // Route to action
-    'route' => 'maintenance/index',
-
-    // Show title
-    'title' => 'this site is under maintenance',
-
-    // Show message
-    'message' => 'Sorry, perform technical works.',
-
-    // Allowed user names
-    'users' => [
-        'BrusSENS',
-    ],
-
-    // Allowed roles
-    'roles' => [
-        'administrator',
-    ],
-
-    // Allowed IP addresses
-    'ips' => [
-        '127.0.0.1',
-    ],
-
-    // Allowed URLs
-    'urls' => [
-        'site/login'
-    ],
-
-    // Layout path
-    'layoutPath' => '@web/maintenance/layout',
-
-    // View path
-    'viewPath' => '@web/maintenance/view',
-
-    // User name attribute name
-    'usernameAttribute' => 'login',
-
-    // HTTP Status Code
-    'statusCode' => 503,
-
-    //Retry-After header
-    'retryAfter' => 120 //or Wed, 21 Oct 2015 07:28:00 GMT for example
-],
+'container' => [
+    'singletons' => [
+        'brussens\maintenance\Maintenance' => [
+            'class' => 'brussens\maintenance\Maintenance',
+            // Route to action
+            'route' => 'maintenance/index',
+            // Filters. Read Filters for more info.
+            'filters' = [
+                //Allowed URIs filter. Your can allow debug panel URI.
+                [
+                    'class' => 'brussens\maintenance\checkers\URIFilter',
+                    'uri' => [
+                        'debug/default/toolbar',
+                        'debug/default/view',
+                        'site/login'
+                    ]
+                ],
+                // Allowed roles filter
+                [
+                    'class' => 'brussens\maintenance\checkers\RoleFilter',
+                    'roles' => [
+                        'administrator'
+                    ]
+                ],
+                // Allowed IP addresses filter
+                [
+                    'class' => 'brussens\maintenance\checkers\IpFilter',
+                    'ips' => [
+                        '127.0.0.1'
+                    ]
+                ],
+                //Allowed user names
+                [
+                    'class' => 'brussens\maintenance\checkers\UserFilter',
+                    'checkedAttribute' => 'username',
+                    'users' => [
+                        'BrusSENS',
+                    ],
+                ]
+            ],
+        ]
+    ]
+]
 ```
-
-## Set maintenance mode by console command
-
-Add to your console config file:
+You can create custom filter:
 ```php
-'bootstrap' => ['log', 'maintenanceMode'],
-...
-'components' => [
-    'maintenanceMode' => [
-        'class' => 'brussens\maintenance\MaintenanceMode',
-    ],
-...
-],
+class MyCustomFilter extends Filter
+{
+    public $time;
+    
+    /**
+     * @return bool
+     */
+    public function isAllowed()
+    {
+        return (bool) $this->time > 3600;
+    }
+}
 ```
-Change your web config file:
+
+## Set maintenance mode by console or dashboard
+
+Add to your console or common config file:
 ```php
-'maintenanceMode' => [
-    'class' => 'brussens\maintenance\MaintenanceMode',
-    'enabled' => false
-],
+'container' => [
+    'singletons' => [
+        'brussens\maintenance\StateInterface' => [
+            'class' => 'brussens\maintenance\states\FileState',
+            'fileName' => 'myfile.ext',
+            'directory' => '@mypath'
+        ]
+    ]
+]
 ```
+Create controller:
+```php
+class MaintenanceController extends Controller
+{
+    /**
+     * @var StateInterface
+     */
+    protected $state;
+    
+    public function __construct(string $id, Module $module, StateInterface $state, array $config = [])
+    {
+        $this->state = $state;
+        parent::__construct($id, $module, $config);
+    }
+    
+    public function actionEnable()
+    {
+        $this->state->enable();
+    }
+    public function actionDisable()
+    {
+        $this->state->disable();
+    }
+}
+```
+
 Now you can set mod by command:
 ```
 php yii maintenance/enable
 ```
 ```
 php yii maintenance/disable
-```
-## Allow display debug panel
-
-Add the following rules in the 'urls' section of component settings:
-
-```php
-'urls' => [
-    'debug/default/toolbar',
-    'debug/default/view'
-]
-```
-
-## Switch mode in dashboard
-
-```php
-class DashboardController extends Controller
-{
-    ...
-    public function actionEnable()
-    {
-        ...
-        Yii::$app->maintenance->enable();
-        ...
-    }
-    public function actionDisable()
-    {
-        ...
-        Yii::$app->maintenance->disable();
-        ...
-    }
-    ...
-}
 ```
