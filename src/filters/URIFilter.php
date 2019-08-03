@@ -52,7 +52,6 @@ class URIFilter extends Filter
      */
     public function isAllowed()
     {
-        print_r($this->request->getPathInfo());
         if (is_array($this->uri) && !empty($this->uri)) {
            return (bool) in_array($this->request->getPathInfo(), $this->uri);
         }
