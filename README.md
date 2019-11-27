@@ -50,8 +50,12 @@ Add to your config file:
         ],
         'brussens\maintenance\StateInterface' => [
             'class' => 'brussens\maintenance\states\FileState',
-            'fileName' => 'myfile.ext',
-            'directory' => '@mypath',
+
+            // optional: use different filename for controlling maintenance state:
+            // 'fileName' => 'myfile.ext',
+
+            // optional: use different directory for controlling maintenance state:
+            // 'directory' => '@mypath',
         ]
     ]
 ]
@@ -129,40 +133,20 @@ Add to your console or common config file:
     'singletons' => [
         'brussens\maintenance\StateInterface' => [
             'class' => 'brussens\maintenance\states\FileState',
-            'fileName' => 'myfile.ext',
-            'directory' => '@mypath',
+            // optional: use different filename for controlling maintenance state:
+            // 'fileName' => 'myfile.ext',
+
+            // optional: use different directory for controlling maintenance state:
+            // 'directory' => '@mypath',
         ]
     ]
-]
-```
-Create a controller in <approot>/commands/MaintenanceController.php:
-```php
-namespace app\commands;
+],
+'controllerMap' => [
+      'maintenance' => [
+          'class' => 'brussens\maintenance\commands\MaintenanceController',
+      ],
+],
 
-use yii\console\Controller;
-
-class MaintenanceController extends Controller
-{
-    /**
-     * @var StateInterface
-     */
-    protected $state;
-
-    public function __construct(string $id, Module $module, StateInterface $state, array $config = [])
-    {
-        $this->state = $state;
-        parent::__construct($id, $module, $config);
-    }
-
-    public function actionEnable()
-    {
-        $this->state->enable();
-    }
-    public function actionDisable()
-    {
-        $this->state->disable();
-    }
-}
 ```
 
 Now you can set mode by command:
