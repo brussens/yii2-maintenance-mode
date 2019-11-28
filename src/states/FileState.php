@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://github.com/brussens/yii2-maintenance-mode
+ * @link      https://github.com/brussens/yii2-maintenance-mode
  * @copyright Copyright (c) since 2015 Dmitry Brusensky
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace brussens\maintenance\states;
@@ -13,6 +13,7 @@ use yii\base\BaseObject;
 
 /**
  * Class FileState
+ *
  * @package brussens\maintenance\states
  */
 class FileState extends BaseObject implements StateInterface
@@ -28,6 +29,7 @@ class FileState extends BaseObject implements StateInterface
 
     /**
      * Turn on mode.
+     *
      * @since 0.2.5
      */
     public function enable()
@@ -37,18 +39,24 @@ class FileState extends BaseObject implements StateInterface
 
     /**
      * Turn off mode.
+     *
      * @since 0.2.5
      */
     public function disable()
     {
         $path = $this->getStatusFilePath();
+
         if (file_exists($path)) {
-            unlink($path);
+            if (! unlink($path)) {
+                throw new \Exception(
+                    "Attention: the maintenance mode could not be disabled because $path could not be removed."
+                );
+            };
         }
     }
 
     /**
-     * @return bool
+     * @return bool will return true if the file exists
      */
     public function isEnabled()
     {
@@ -57,8 +65,9 @@ class FileState extends BaseObject implements StateInterface
 
     /**
      * Return status file path.
-     * @since 0.2.5
+     *
      * @return bool|string
+     * @since 0.2.5
      */
     protected function getStatusFilePath()
     {
