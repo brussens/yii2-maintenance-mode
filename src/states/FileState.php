@@ -19,11 +19,11 @@ use yii\base\BaseObject;
 class FileState extends BaseObject implements StateInterface
 {
     /**
-     * @var string
+     * @var string the filename that will determine if the maintenance mode is enabled
      */
-    public $fileName = '.enable';
+    public $fileName = 'YII_MAINTENANCE_MODE_ENABLED';
     /**
-     * @var string
+     * @var string the directory in that the file stated in $fileName above is residing
      */
     public $directory = '@runtime';
 
