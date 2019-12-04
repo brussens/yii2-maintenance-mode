@@ -22,10 +22,24 @@ class FileState extends BaseObject implements StateInterface
      * @var string the filename that will determine if the maintenance mode is enabled
      */
     public $fileName = 'YII_MAINTENANCE_MODE_ENABLED';
+
     /**
      * @var string the directory in that the file stated in $fileName above is residing
      */
     public $directory = '@runtime';
+
+    /**
+     * @var string the complete path of the file - populated in __construct()
+     */
+    public $path;
+
+    /**
+     * FileState constructor.
+     */
+    public function __construct()
+    {
+        $this->path = $this->getStatusFilePath();
+    }
 
     /**
      * Turn on mode.
@@ -34,7 +48,13 @@ class FileState extends BaseObject implements StateInterface
      */
     public function enable()
     {
-        file_put_contents($this->getStatusFilePath(), ' ');
+        if (file_put_contents(
+                $this->getStatusFilePath(),
+                'The maintenance Mode of your Application is enabled if this file exists.') === false) {
+            throw new \Exception(
+                "Attention: the maintenance mode could not be enabled because {$this->path} could not be created."
+            );
+        }
     }
 
     /**
@@ -44,12 +64,10 @@ class FileState extends BaseObject implements StateInterface
      */
     public function disable()
     {
-        $path = $this->getStatusFilePath();
-
-        if (file_exists($path)) {
-            if (! unlink($path)) {
+        if (file_exists($this->path)) {
+            if (! unlink($this->path)) {
                 throw new \Exception(
-                    "Attention: the maintenance mode could not be disabled because $path could not be removed."
+                    "Attention: the maintenance mode could not be disabled because {$this->path} could not be removed."
                 );
             };
         }
@@ -60,7 +78,7 @@ class FileState extends BaseObject implements StateInterface
      */
     public function isEnabled()
     {
-        return file_exists($this->getStatusFilePath());
+        return file_exists($this->path);
     }
 
     /**
