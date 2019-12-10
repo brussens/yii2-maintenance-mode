@@ -26,28 +26,36 @@ Add to your config file:
     'singletons' => [
         'brussens\maintenance\Maintenance' => [
             'class' => 'brussens\maintenance\Maintenance',
+
             // Route to action
             'route' => 'maintenance/index',
+
             // Filters. Read Filters for more info.
-            'filters' = [
+            'filters' => [
                 [
                     'class' => 'brussens\maintenance\filters\URIFilter',
                     'uri' => [
                         'debug/default/toolbar',
                         'debug/default/view',
-                        'site/login'
+                        'site/login',
                     ]
                 ]
             ],
+
             // HTTP Status Code
             'statusCode' => 503,
+
             //Retry-After header
-            'retryAfter' => 120 //or Wed, 21 Oct 2015 07:28:00 GMT for example
+            'retryAfter' => 120 // or Wed, 21 Oct 2015 07:28:00 GMT for example
         ],
         'brussens\maintenance\StateInterface' => [
             'class' => 'brussens\maintenance\states\FileState',
-            'fileName' => 'myfile.ext'
-            'directory' => '@mypath'
+
+            // optional: use different filename for controlling maintenance state:
+            // 'fileName' => 'myfile.ext',
+
+            // optional: use different directory for controlling maintenance state:
+            // 'directory' => '@mypath',
         ]
     ]
 ]
@@ -64,28 +72,28 @@ You can use filters for allow excepts:
             // Route to action
             'route' => 'maintenance/index',
             // Filters. Read Filters for more info.
-            'filters' = [
+            'filters' => [
                 //Allowed URIs filter. Your can allow debug panel URI.
                 [
                     'class' => 'brussens\maintenance\filters\URIFilter',
                     'uri' => [
                         'debug/default/toolbar',
                         'debug/default/view',
-                        'site/login'
+                        'site/login',
                     ]
                 ],
                 // Allowed roles filter
                 [
                     'class' => 'brussens\maintenance\filters\RoleFilter',
                     'roles' => [
-                        'administrator'
+                        'administrator',
                     ]
                 ],
                 // Allowed IP addresses filter
                 [
                     'class' => 'brussens\maintenance\filters\IpFilter',
                     'ips' => [
-                        '127.0.0.1'
+                        '127.0.0.1',
                     ]
                 ],
                 //Allowed user names
@@ -106,7 +114,7 @@ You can create custom filter:
 class MyCustomFilter extends Filter
 {
     public $time;
-    
+
     /**
      * @return bool
      */
@@ -125,39 +133,23 @@ Add to your console or common config file:
     'singletons' => [
         'brussens\maintenance\StateInterface' => [
             'class' => 'brussens\maintenance\states\FileState',
-            'fileName' => 'myfile.ext',
-            'directory' => '@mypath'
+            // optional: use different filename for controlling maintenance state:
+            // 'fileName' => 'myfile.ext',
+
+            // optional: use different directory for controlling maintenance state:
+            // 'directory' => '@mypath',
         ]
     ]
-]
-```
-Create controller:
-```php
-class MaintenanceController extends Controller
-{
-    /**
-     * @var StateInterface
-     */
-    protected $state;
-    
-    public function __construct(string $id, Module $module, StateInterface $state, array $config = [])
-    {
-        $this->state = $state;
-        parent::__construct($id, $module, $config);
-    }
-    
-    public function actionEnable()
-    {
-        $this->state->enable();
-    }
-    public function actionDisable()
-    {
-        $this->state->disable();
-    }
-}
+],
+'controllerMap' => [
+      'maintenance' => [
+          'class' => 'brussens\maintenance\commands\MaintenanceController',
+      ],
+],
+
 ```
 
-Now you can set mod by command:
+Now you can set mode by command:
 ```
 php yii maintenance/enable
 ```
