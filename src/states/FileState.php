@@ -36,11 +36,16 @@ class FileState extends BaseObject implements StateInterface
     /**
      * FileState constructor.
      */
-    public function __construct()
+//     public function __construct()
+//     {
+//         $this->path = $this->getStatusFilePath();
+//     }
+    
+    public function init()
     {
+        // construct path on init
         $this->path = $this->getStatusFilePath();
     }
-
     /**
      * Turn on mode.
      *
