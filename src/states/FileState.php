@@ -49,8 +49,8 @@ class FileState extends BaseObject implements StateInterface
     public function enable(string $message = null): bool
     {
         $content = [
-            'maintenance_message' => $message,
-            'hint'         => 'The maintenance mode of your application is enabled if this file exists.',
+            'message' => $message,
+            'hint'    => 'The maintenance mode of your application is enabled if this file exists.',
         ];
 
         if (file_put_contents($this->path, json_encode($content)) === false) {
@@ -92,7 +92,7 @@ class FileState extends BaseObject implements StateInterface
      * @return bool|string
      * @since 0.2.5
      */
-    protected function getStatusFilePath()
+    public function getStatusFilePath()
     {
         return Yii::getAlias($this->directory . '/' . $this->fileName);
     }

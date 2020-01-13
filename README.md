@@ -156,3 +156,5 @@ php yii maintenance/enable --message="The system is in a planned maintenance and
 ```
 php yii maintenance/disable
 ```
+
+You can use the views/maintenance.php view as a boilerplate for designing your own maintenance page.
