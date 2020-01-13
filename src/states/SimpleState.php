@@ -24,9 +24,10 @@ class SimpleState extends BaseObject implements StateInterface
     /**
      * @inheritdoc
      */
-    public function enable()
+    public function enable(string $message = null): bool
     {
         $this->enabled = true;
+        return true;
     }
 
     /**

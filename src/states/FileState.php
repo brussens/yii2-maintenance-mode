@@ -46,14 +46,20 @@ class FileState extends BaseObject implements StateInterface
      *
      * @since 0.2.5
      */
-    public function enable()
+    public function enable(string $message = null): bool
     {
-        if (file_put_contents($this->path,
-                'The maintenance Mode of your Application is enabled if this file exists.') === false) {
+        $content = [
+            'maintenance_message' => $message,
+            'hint'         => 'The maintenance mode of your application is enabled if this file exists.',
+        ];
+
+        if (file_put_contents($this->path, json_encode($content)) === false) {
             throw new \Exception(
                 "Attention: the maintenance mode could not be enabled because {$this->path} could not be created."
             );
         }
+
+        return true;
     }
 
     /**

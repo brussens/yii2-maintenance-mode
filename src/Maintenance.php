@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://github.com/brussens/yii2-maintenance-mode
+ * @link      https://github.com/brussens/yii2-maintenance-mode
  * @copyright Copyright (c) since 2015 Dmitry Brusensky
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace brussens\maintenance;
@@ -14,6 +14,7 @@ use yii\base\BootstrapInterface;
 
 /**
  * Class Maintenance
+ *
  * @package brussens\maintenance
  */
 class Maintenance extends BaseObject implements BootstrapInterface
@@ -25,33 +26,42 @@ class Maintenance extends BaseObject implements BootstrapInterface
 
     /**
      * Route to maintenance action.
+     *
      * @var string
      */
     public $route;
+
     /**
      * @var array
      */
     public $filters;
+
     /**
      * Default status code to send on maintenance
      * 503 = Service Unavailable
+     *
      * @var integer
      */
+
     public $statusCode = 503;
     /**
      * Retry-After header
+     *
      * @var bool|string
      */
+
     public $retryAfter = false;
     /**
      * @var StateInterface
      */
+
     protected $state;
 
     /**
      * Maintenance constructor.
+     *
      * @param StateInterface $state
-     * @param array $config
+     * @param array          $config
      */
     public function __construct(StateInterface $state, array $config = [])
     {
@@ -61,6 +71,7 @@ class Maintenance extends BaseObject implements BootstrapInterface
 
     /**
      * @param Application $app
+     *
      * @throws InvalidConfigException
      */
     public function bootstrap($app)
@@ -70,12 +81,12 @@ class Maintenance extends BaseObject implements BootstrapInterface
             $response->statusCode = self::STATUS_CODE_OK;
         } else {
             $response->statusCode = $this->statusCode;
-            if ($this->retryAfter){
+            if ($this->retryAfter) {
                 $response->headers->set('Retry-After', $this->retryAfter);
             }
         }
 
-        if ($this->state->isEnabled() && !$this->filtersExcepted()) {
+        if ($this->state->isEnabled() && ! $this->filtersExcepted()) {
             $app->catchAll = [$this->route];
         } else {
             $response->statusCode = self::STATUS_CODE_OK;
@@ -88,13 +99,13 @@ class Maintenance extends BaseObject implements BootstrapInterface
      */
     protected function filtersExcepted()
     {
-        if (!is_array($this->filters) || empty($this->filters)) {
+        if (! is_array($this->filters) || empty($this->filters)) {
             return false;
         }
 
         foreach ($this->filters as $config) {
             $filter = \Yii::createObject($config);
-            if (!($filter instanceof Filter)) {
+            if (! ($filter instanceof Filter)) {
                 throw new InvalidConfigException(
                     'Class "' . get_class($filter) . '" must instance of "' . Filter::className() . '".'
                 );

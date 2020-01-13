@@ -16,7 +16,8 @@ interface StateInterface
     /**
      * Enable mode method
      */
-    public function enable();
+    public function enable(string $message = null): bool;
+
     /**
      * Disable mode method
      */

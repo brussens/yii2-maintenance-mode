@@ -96,7 +96,7 @@ You can use filters for allow excepts:
                         '127.0.0.1',
                     ]
                 ],
-                //Allowed user names
+                // Allowed user names
                 [
                     'class' => 'brussens\maintenance\filters\UserFilter',
                     'checkedAttribute' => 'username',
@@ -151,7 +151,7 @@ Add to your console or common config file:
 
 Now you can set mode by command:
 ```
-php yii maintenance/enable
+php yii maintenance/enable --message="The system is in a planned maintenance and is available again in estimated three hours"
 ```
 ```
 php yii maintenance/disable
