@@ -1,8 +1,7 @@
-1.2.0 (2020-01-13)
-ENH: add ability to specify custom message that is being displayed to the users 
+1.2.0 (not yet release, estimation: somewhere 2020-01)
+ENH: add ability to specify custom message that is being displayed to the users
 during maintenance mode (thyseus)
-ENH: added a boilerplate maintenance.php file that could be used for easy bootstrapping
-of an project specific maintenance display view
+ENH: added a boilerplate controller and view that could be used for easy bootstrapping (thyseus)
 
 1.1.0
 ENH: added commands\MaintenanceController.php (thyseus)

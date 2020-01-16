@@ -28,7 +28,7 @@ Add to your config file:
             'class' => 'brussens\maintenance\Maintenance',
 
             // Route to action
-            'route' => 'maintenance/index',
+            'route' => '//maintenance/index',
 
             // Filters. Read Filters for more info.
             'filters' => [
@@ -69,7 +69,9 @@ You can use filters for allow excepts:
     'singletons' => [
         'brussens\maintenance\Maintenance' => [
             'class' => 'brussens\maintenance\Maintenance',
-            // Route to action
+            // Route to action. There is a example maintenance controller
+            // provided with the package. If you dont want to use it, you 
+            // can define your custom action one here:
             'route' => 'maintenance/index',
             // Filters. Read Filters for more info.
             'filters' => [
@@ -109,7 +111,7 @@ You can use filters for allow excepts:
     ]
 ]
 ```
-You can create custom filter:
+You can create a custom filter:
 ```php
 class MyCustomFilter extends Filter
 {
@@ -157,4 +159,11 @@ php yii maintenance/enable --message="The system is in a planned maintenance and
 php yii maintenance/disable
 ```
 
-You can use the views/maintenance.php view as a boilerplate for designing your own maintenance page.
+A small MaintenanceController and maintenance view is provided with the package.
+You can place this components in your application by running in your application root:
+
+```
+$ cp vendor/brussens/yii2-maintenance-mode/src/controllers/MaintenanceController.php controllers/
+$ co -r vendor/brussens/yii2-maintenance-mode/src/views/maintenance/ views/
+```
+
