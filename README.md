@@ -164,6 +164,6 @@ You can place this components in your application by running in your application
 
 ```
 $ cp vendor/brussens/yii2-maintenance-mode/src/controllers/MaintenanceController.php controllers/
-$ co -r vendor/brussens/yii2-maintenance-mode/src/views/maintenance/ views/
+$ cp -r vendor/brussens/yii2-maintenance-mode/src/views/maintenance/ views/
 ```
 
