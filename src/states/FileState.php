@@ -29,23 +29,18 @@ class FileState extends BaseObject implements StateInterface
     public $directory = '@runtime';
 
     /**
-     * @var string the complete path of the file - populated in __construct()
+     * @var string the complete path of the file - populated in init
      */
     public $path;
-
-    /**
-     * FileState constructor.
-     */
-//     public function __construct()
-//     {
-//         $this->path = $this->getStatusFilePath();
-//     }
     
+    /**
+     * Initialization
+     */
     public function init()
     {
-        // construct path on init
         $this->path = $this->getStatusFilePath();
     }
+    
     /**
      * Turn on mode.
      *
@@ -69,7 +64,7 @@ class FileState extends BaseObject implements StateInterface
     public function disable()
     {
         if (file_exists($this->path)) {
-            if (! unlink($this->path)) {
+            if (!unlink($this->path)) {
                 throw new \Exception(
                     "Attention: the maintenance mode could not be disabled because {$this->path} could not be removed."
                 );
