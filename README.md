@@ -33,8 +33,8 @@ Add to your config file:
             // Filters. Read Filters for more info.
             'filters' => [
                 [
-                    'class' => 'brussens\maintenance\filters\URIFilter',
-                    'uri' => [
+                    'class' => 'brussens\maintenance\filters\RouteFilter',
+                    'routes' => [
                         'debug/default/toolbar',
                         'debug/default/view',
                         'site/login',
@@ -73,10 +73,10 @@ You can use filters for allow excepts:
             'route' => 'maintenance/index',
             // Filters. Read Filters for more info.
             'filters' => [
-                //Allowed URIs filter. Your can allow debug panel URI.
+                //Allowed routes filter. Your can allow debug panel routes.
                 [
-                    'class' => 'brussens\maintenance\filters\URIFilter',
-                    'uri' => [
+                    'class' => 'brussens\maintenance\filters\RouteFilter',
+                    'routes' => [
                         'debug/default/toolbar',
                         'debug/default/view',
                         'site/login',

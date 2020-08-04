@@ -11,50 +11,49 @@ use brussens\maintenance\Filter;
 use yii\web\Request;
 
 /**
- * Class URIChecker
+ * Class RouteFilter
  * @package brussens\maintenance\filters
- * @deprecated since 1.2.0
+ * @since 1.2.0
  */
-class URIFilter extends Filter
+class RouteFilter extends Filter
 {
     /**
      * @var array
      */
-    public $uri;
+    public $routes;
     /**
-     * @var Request
+     * @var string
      */
-    protected $request;
+    protected $currentRoute;
 
     /**
-     * URIChecker constructor.
+     * RouteFilter constructor.
      * @param Request $request
      * @param array $config
      */
     public function __construct(Request $request, array $config = [])
     {
-        $this->request = $request;
+        $this->currentRoute = $request->resolve()[0];
         parent::__construct($config);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function init()
     {
-        if (is_string($this->uri)) {
-            $this->uri = [$this->uri];
+        if (is_string($this->routes)) {
+            $this->routes = [$this->routes];
         }
     }
 
     /**
      * @return bool
-     * @throws \yii\base\InvalidConfigException
      */
     public function isAllowed()
     {
-        if (is_array($this->uri) && !empty($this->uri)) {
-           return (bool) in_array($this->request->getPathInfo(), $this->uri);
+        if (is_array($this->routes) && !empty($this->routes)) {
+            return (bool) in_array($this->currentRoute, $this->routes);
         }
         return false;
     }
