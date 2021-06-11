@@ -11,7 +11,7 @@ use brussens\maintenance\Filter;
 use yii\web\User;
 
 /**
- * Class RoleChecker
+ * Class RoleFilter
  * @package brussens\maintenance\filters
  */
 class RoleFilter extends Filter

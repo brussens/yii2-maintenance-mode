@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://github.com/brussens/yii2-maintenance-mode
+ * @copyright Copyright (c) since 2015 Dmitry Brusensky
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 
 namespace brussens\maintenance\commands;
 
@@ -7,6 +12,10 @@ use yii\console\Controller;
 use yii\base\Module;
 use brussens\maintenance\StateInterface;
 
+/**
+ * Maintenance mode console controller
+ * @package brussens\maintenance\commands
+ */
 class MaintenanceController extends Controller
 {
     /**
@@ -14,7 +23,14 @@ class MaintenanceController extends Controller
      */
     protected $state;
 
-    public function __construct(string $id, Module $module, StateInterface $state, array $config = [])
+    /**
+     * MaintenanceController constructor.
+     * @param string $id
+     * @param Module $module
+     * @param StateInterface $state
+     * @param array $config
+     */
+    public function __construct($id, Module $module, StateInterface $state, array $config = [])
     {
         $this->state = $state;
         parent::__construct($id, $module, $config);

@@ -11,7 +11,7 @@ use brussens\maintenance\Filter;
 use yii\web\Request;
 
 /**
- * IP addresses checker with mask supported.
+ * IP addresses filter with mask supported.
  * @package brussens\maintenance\filters
  */
 class IpFilter extends Filter
